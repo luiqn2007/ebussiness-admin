@@ -7,7 +7,6 @@ import OrderManage from "../views/admin/OrderManage.vue";
 import LoginView from "../views/admin/LoginView.vue";
 import SalesStatistics from "../views/admin/SalesStatistics.vue";
 import OrderStatistics from "../views/admin/OrderStatistics.vue";
-import * as process from "echarts";
 
 const routes = [{
     path: '/',
@@ -40,6 +39,20 @@ const routes = [{
 const router = createRouter({
     routes,
     history: createWebHistory(process.env.BASE_URL),
+})
+
+router.beforeEach((to, from) => {
+    if (to.meta.auth) {
+        if (window.sessionStorage.getItem('uname') == null) {
+            alert("您没有登录，无权访问")
+            return {
+                path: '/',
+                query: {
+                    redirect: to.fullPath
+                }
+            }
+        }
+    }
 })
 
 export default router
