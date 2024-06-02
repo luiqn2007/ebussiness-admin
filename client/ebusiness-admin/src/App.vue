@@ -1,9 +1,8 @@
 <script setup>
-import LoginView from './views/admin/LoginView.vue'
 </script>
 
 <template>
-  <LoginView></LoginView>
+  <router-view></router-view>
 </template>
 
 <style scoped>

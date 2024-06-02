@@ -1,14 +1,11 @@
 <script setup>
 
-import {ref, reactive, getCurrentInstance} from "vue"
+import {ref, reactive} from "vue"
 import {useRoute, useRouter} from "vue-router"
 import {ElMessageBox} from 'element-plus'
 
 const loginFormRef = ref()
-const loginForm = reactive({
-  uname: '',
-  upwd: '',
-})
+const loginForm = reactive({})
 const rules = reactive({
   uname: [{
     required: true,
@@ -27,10 +24,9 @@ const dialogVisible = ref(true)
 
 const route = useRoute()
 const router = useRouter()
-const proxy = getCurrentInstance()
 
 const login = loginForm => {
-  loginForm.value.validate(valid => {
+  loginFormRef.value.validate(valid => {
     if (valid) {
       if (loginForm.uname === 'admin' && loginForm.upwd === 'admin') {
         ElMessageBox.alert('登录成功', {confirmButtonText: '确定'})
@@ -63,7 +59,7 @@ const cancel = () => loginFormRef.value.resetFields()
           <el-input v-model="loginForm.upwd" placeholder="请输入密码" show-password/>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="login(loginFormRef)" :loading="loadingButton">{{ loadingButtonText }}
+          <el-button type="primary" @click="login(loginForm)" :loading="loadingButton">{{ loadingButtonText }}
           </el-button>
           <el-button type="danger" @click="cancel">重置</el-button>
         </el-form-item>

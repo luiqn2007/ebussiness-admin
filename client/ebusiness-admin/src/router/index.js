@@ -18,19 +18,19 @@ const routes = [{
     meta: {auth: true},
     children: [
         {
-            path: '/home/goodsmanage',
+            path: 'goodsmanage',
             component: GoodsManage,
         }, {
-            path: '/home/ordermanage',
+            path: 'ordermanage',
             component: OrderManage,
         }, {
-            path: '/home/typemanage',
+            path: 'typemanage',
             component: TypeManage,
         }, {
-            path: '/home/salesstatistics',
+            path: 'salesstatistics',
             component: SalesStatistics,
         }, {
-            path: '/home/orderstatistics',
+            path: 'orderstatistics',
             component: OrderStatistics,
         }
     ]
