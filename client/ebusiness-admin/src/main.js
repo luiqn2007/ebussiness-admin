@@ -13,6 +13,6 @@ for (const [key, component] of Object.entries(ElementPlusIconVue)) {
     app.component(key, component)
 }
 
-app.use(ElementPlus)
-    .use(router)
+app.use(router)
+    .use(ElementPlus)
     .mount('#app')

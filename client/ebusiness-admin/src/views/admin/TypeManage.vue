@@ -16,26 +16,25 @@ let types = reactive([{
   name: '文具'
 }])
 
-const FORM_ADD = 'add'
-const FORM_UPDATE = 'update'
-let currentForm = ref('')
-const addFormRef = reactive({})
+const addFormVisible = ref(false)
+const addFormRef = ref({})
 const addForm = reactive({})
-
+const updateFormVisible = ref(false)
+const updateDataRef = ref({})
+const updateData = reactive({})
 const rules = reactive({
   typename: [
     {required: true, message: '请输入类型名称', trigger: 'blur'},
     {min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur'}
   ]
 })
-const detailDataRef = reactive({})
-const detailData = reactive({})
+
 const total = ref(3)
 const pageSize = ref(2)
 const currentPage = ref(1)
 
 const openAdd = () => {
-  currentForm.value = FORM_ADD
+  addFormVisible.value = true
   addForm.id = ''
   addForm.name = ''
 }
@@ -44,53 +43,51 @@ const add = async (formEl) => {
   await formEl.validate((valid) => {
     if (valid) {
       addForm.id = types[types.length - 1].id + 1
-      types.push({
-        id: addForm.id,
-        name: addForm.name,
-      })
-      ElMessage({
-        message: '添加成功',
-        type: 'success',
-      })
+      types.push({ id: addForm.id, name: addForm.name })
+      ElMessage.success('添加成功')
+      addFormVisible.value = false
     } else {
-      console.log('error submit!')
+      ElMessage.error('添加失败')
     }
   })
 }
-
 const cancelAdd = () => {
-  addFormRef.resetFields()
-  currentForm.value = ''
-}
-
-const update = async (formEl) => {
-  if (!formEl) return
-  await formEl.valid((valid) => {
-    if (valid) {
-      types.map(t => {
-        if (t.id === detailData.id) {
-          t.name = detailData.name
-        }
-        return t
-      })
-      ElMessage({ message: '修改成功', type: 'success' })
-      currentForm = ''
-    } else {
-      ElMessage({ message: '表单验证失败', type: 'error' })
-    }
-  })
+  addFormRef.value.resetFields()
+  addFormVisible.value = false
 }
 
 const openUpdate = (row) => {
-  currentForm.value = FORM_UPDATE
-  detailData.id = row.id
-  detailData.name = row.name
+  updateFormVisible.value = true
+  updateData.id = row.id
+  updateData.name = row.name
+}
+const update = async (formEl) => {
+  if (!formEl) return
+  console.log(formEl)
+  await formEl.validate((valid) => {
+    if (valid) {
+      types.map(t => {
+        if (t.id === updateData.id) {
+          t.name = updateData.name
+        }
+        return t
+      })
+      ElMessage.success('修改成功')
+      updateFormVisible.value = false
+    } else {
+      ElMessage.error('表单验证失败')
+    }
+  })
+}
+const cancelUpdate = () => {
+  updateFormVisible.value = false
+  updateDataRef.value.resetFields()
 }
 
 const confirmEvent = (row, index) => {
   types.splice(index, 1)
   total.value = types.length
-  ElMessage({ message: '删除成功', type: 'success' })
+  ElMessage.success('删除成功')
 }
 
 const cancelEvent = () => {}
@@ -120,22 +117,39 @@ const cancelEvent = () => {}
         </el-table-column>
       </el-table>
       <div>
-        <el-pagination background layout="total, prev, pager, next"
-                       :current-page="currentPage" :page-size="pageSize" :total="total" />
+        <el-pagination background layout="total,prev,pager,next" style="margin-top: 22px"
+                       v-model:currentPage="currentPage" :page-size="pageSize" :total="total"/>
       </div>
     </el-tab-pane>
   </el-tabs>
-  <el-dialog v-model="currentForm === FORM_ADD" title="添加类型">
+  <el-dialog v-model="addFormVisible" title="新增类型">
     <el-form ref="addFormRef" :model="addForm" :rules="rules">
       <el-input v-model = "addForm.id" hidden="hidden" />
       <el-form-item label="类型名称" prop="name">
         <el-input v-model="addForm.name" placeholder="请输入类型名称" />
       </el-form-item>
     </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="cancelAdd">取消</el-button>
+        <el-button @click="add(addFormRef)" type="primary">新增</el-button>
+      </span>
+    </template>
   </el-dialog>
-  <el-dialog></el-dialog>
+  <el-dialog v-model="updateFormVisible" title="类型修改">
+    <el-form ref="updateDataRef" :model="updateData" :rules="rules">
+      <el-form-item label="类型 ID" prop="id">
+        <el-input v-model="updateData.id" disabled />
+      </el-form-item>
+      <el-form-item label="类型名称" prop="name">
+        <el-input v-model="updateData.name" placeholder="请输入类型名称" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="cancelUpdate">取消</el-button>
+        <el-button @click="update(updateDataRef)" type="primary">确定</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
-
-<style scoped>
-
-</style>

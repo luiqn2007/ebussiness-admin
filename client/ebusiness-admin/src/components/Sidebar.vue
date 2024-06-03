@@ -9,7 +9,7 @@ const state = reactive({
       path: 'typemanage',
       name: '类型管理',
     }, {
-      path: 'goodmanage',
+      path: 'goodsmanage',
       name: '商品管理',
     }, {
       path: 'ordermanage',
@@ -34,20 +34,20 @@ const state = reactive({
              background-color="#324157" text-color="#bfcbd9" active-text-color="#20a0ff">
       <template v-for="(item, i) in state.items">
         <template v-if="item.subs">
-          <el-sub-menu :index="(i + 1).toString()" :key="(i + 1)">
+          <el-sub-menu :index="(i + 1).toString()" :key="i + 1">
             <template #title><el-icon><edit /></el-icon>{{ item.title }}</template>
-          </el-sub-menu>
-          <template v-for="subItem in item.subs">
-            <el-sub-menu v-if="subItem.subs" :index="subItem.path" :key="subItem.path">
-              <template #title><el-icon><edit /></el-icon>{{ subItem.name }}</template>
-              <el-sub-menu  v-for="(subItem2, j) in subItem.subs" :index="subItem2.path" :key="j">
-                <el-icon><edit /></el-icon>{{ subItem2.name }}
+            <template v-for="subItem in item.subs">
+              <el-sub-menu v-if="subItem.subs" :index="subItem.path" :key="subItem.path">
+                <template #title><el-icon><edit /></el-icon>{{ subItem.name }}</template>
+                <el-sub-menu v-for="(subItem2, j) in subItem.subs" :index="subItem2.path" :key="j">
+                  <el-icon><edit /></el-icon>{{ subItem2.name }}
+                </el-sub-menu>
               </el-sub-menu>
-            </el-sub-menu>
-            <el-sub-menu v-else :index="subItem.path" :key="subItem.path">
-              <el-icon><edit /></el-icon>{{ subItem.name }}
-            </el-sub-menu>
-          </template>
+              <el-menu-item v-else :index="subItem.path" :key="`${subItem.path}-else`">
+                <el-icon><edit /></el-icon>{{ subItem.name }}
+              </el-menu-item>
+            </template>
+          </el-sub-menu>
         </template>
         <el-sub-menu v-else :index="(i + 1).toString()" :key="i + 1">
           <el-icon><edit /></el-icon>{{ item.title }}
