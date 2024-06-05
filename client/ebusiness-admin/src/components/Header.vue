@@ -23,7 +23,7 @@ const week = ['星期日', '星期一', '星期二', '星期三', '星期四', '
   <div class="mytime">今天是 {{fullyear}} 年 {{month}} 月 {{datet}} 日 {{week}}</div>
   <div class="header-right">
     <div class="header-user-con"><!-- 用户头像 -->
-      <div class="user-avator"><img src="../assets/mylogo.png"></div>
+      <div class="user-avator"><img src="../assets/profiles/mylogo.png"></div>
     </div>
     <el-dropdown class="user-name" trigger="click" @command="handleCommand">
       <span class="el-dropdown-link">{{ userName }}<i class="el-icon-caret-bottom"></i></span>
