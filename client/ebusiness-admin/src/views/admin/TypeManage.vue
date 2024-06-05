@@ -118,7 +118,7 @@ const cancelEvent = () => {
       </el-table>
       <div>
         <el-pagination class="pages" background layout="prev,pager,next,total"
-                       v-model:currentPage="currentPage" :page-size="pageSize" :total="total"/>
+                       v-model:current-page="currentPage" :page-size="pageSize" :total="total"/>
       </div>
     </el-tab-pane>
   </el-tabs>
