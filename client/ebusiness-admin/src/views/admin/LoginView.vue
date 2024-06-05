@@ -29,7 +29,6 @@ const login = loginForm => {
   loginFormRef.value.validate(valid => {
     if (valid) {
       if (loginForm.uname === 'admin' && loginForm.upwd === 'admin') {
-        ElMessageBox.alert('登录成功', {confirmButtonText: '确定'})
         sessionStorage.setItem('uname', loginForm.uname)
         const path = route.query.redirect
         router.replace({path: path === '/' || path === undefined ? '/home' : path})
@@ -46,12 +45,12 @@ const login = loginForm => {
 }
 
 const cancel = () => loginFormRef.value.resetFields()
-
-
 </script>
 
 <template>
-  <el-dialog title="管理员登录" v-model="dialogVisible" width="30%">
+  <el-dialog title="管理员登录" v-model="dialogVisible" width="30%"
+             :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false"
+             @keydown.enter="login(loginForm)">
     <div class="box">
       <el-form ref="loginFormRef" :model="loginForm" :rules="rules" style="width: 100%" label-width="20%">
         <el-form-item label="用户名" prop="uname">
